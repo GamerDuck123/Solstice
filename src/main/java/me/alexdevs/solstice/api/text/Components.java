@@ -120,8 +120,7 @@ public class Components {
 
 
         if (capabilities.isEmpty()) {
-//            return Placeholders.parseText(TextNode.of(message), Format.PLACEHOLDER_PATTERN, placeholders);
-            return Placeholders.parseText(TextNode.of(message), null);
+            return Placeholders.parseText(TextNode.of(message), Format.PLACEHOLDER_PATTERN, placeholders);
         }
 
         var parsers = new ArrayList<NodeParser>();
@@ -140,8 +139,7 @@ public class Components {
         var parser = NodeParser.merge(parsers.toArray(NodeParser[]::new));
 
         var node = parser.parseNode(message);
-//        return Placeholders.parseText(node, Format.PLACEHOLDER_PATTERN, placeholders);
-        return Placeholders.parseText(node, null);
+        return Placeholders.parseText(node, Format.PLACEHOLDER_PATTERN, placeholders);
     }
 
     public static Component chat(String message, CommandSourceStack source) {

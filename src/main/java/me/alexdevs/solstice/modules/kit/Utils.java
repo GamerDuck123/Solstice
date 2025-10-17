@@ -1,10 +1,14 @@
 package me.alexdevs.solstice.modules.kit;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.JsonOps;
 import eu.pb4.placeholders.impl.StringArgOps;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import me.alexdevs.solstice.Solstice;
-import net.minecraft.nbt.TagParser;
+import net.minecraft.nbt.*;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -13,17 +17,12 @@ import java.util.List;
 
 public class Utils {
     public static String serializeItemStack(ItemStack itemStack) {
-//        var registry = Solstice.server.registryAccess();
-//        var nbt = itemStack.save(registry);
-//        return nbt.getAsString();
-        return ItemStack.CODEC.encodeStart(StringArgOps.INSTANCE, itemStack).resultOrPartial().get().left().get();
+        return NbtUtils.prettyPrint(ItemStack.CODEC.encodeStart(NbtOps.INSTANCE, itemStack).result().get());
     }
 
-    public static ItemStack deserializeItemStack(String string) throws CommandSyntaxException {
-//        var registry = Solstice.server.registryAccess();
-//        var nbt = TagParser.parseCompoundFully(string);
-//        return ItemStack.parseOptional(registry, nbt);
-        return ItemStack.CODEC.decode(StringArgOps.INSTANCE, StringArgOps.INSTANCE.createString(string)).resultOrPartial().get().getFirst();
+    public static ItemStack deserializeItemStack(String element) throws CommandSyntaxException {
+        var nbt = TagParser.parseCompoundFully(element);
+        return ItemStack.CODEC.decode(NbtOps.INSTANCE, nbt).result().get().getFirst();
     }
 
     public static KitInventory createInventory(List<ItemStack> items) {
