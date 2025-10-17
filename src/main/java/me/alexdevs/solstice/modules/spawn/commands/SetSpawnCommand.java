@@ -5,8 +5,10 @@ import me.alexdevs.solstice.api.ServerLocation;
 import me.alexdevs.solstice.api.module.ModCommand;
 import me.alexdevs.solstice.modules.spawn.SpawnModule;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.LevelData;
 
 import java.util.List;
 import java.util.Map;
@@ -30,14 +32,15 @@ public class SetSpawnCommand extends ModCommand<SpawnModule> {
                 .executes(context -> {
                     var player = context.getSource().getPlayerOrException();
                     var location = new ServerLocation(player);
-                    var world = player.serverLevel();
+                    var world = player.level();
 
                     // world spawn point is ignored on non-overworld levels
                     if(world.dimension() == Level.OVERWORLD) {
-                        world.setDefaultSpawnPos(
-                                location.getBlockPos(),
-                                location.getYaw()
-                        );
+                        world.setRespawnData(new LevelData.RespawnData(
+                                GlobalPos.of(world.dimension(), location.getBlockPos()),
+                                location.getYaw(),
+                                location.getPitch()
+                        ));
                     } else {
                         module.getServerData().spawnPoints.put(location.getWorld(), location);
                     }

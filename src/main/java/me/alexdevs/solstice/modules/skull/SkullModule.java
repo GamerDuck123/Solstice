@@ -27,19 +27,19 @@ public class SkullModule extends ModuleBase.Toggleable {
     public ItemStack createSkull(String name) {
         var skull = Items.PLAYER_HEAD.getDefaultInstance();
         name = name.substring(0, Math.min(name.length(), 16));
-        skull.set(DataComponents.PROFILE, new ResolvableProfile(Optional.of(name), Optional.empty(), new PropertyMap()));
+        skull.set(DataComponents.PROFILE, ResolvableProfile.createUnresolved(name));
         return skull;
     }
 
     public ItemStack createSkull(UUID uuid) {
         var skull = Items.PLAYER_HEAD.getDefaultInstance();
-        skull.set(DataComponents.PROFILE, new ResolvableProfile(Optional.empty(), Optional.of(uuid), new PropertyMap()));
+        skull.set(DataComponents.PROFILE, ResolvableProfile.createUnresolved(uuid));
         return skull;
     }
 
     public ItemStack createSkull(GameProfile profile) {
         var skull = Items.PLAYER_HEAD.getDefaultInstance();
-        skull.set(DataComponents.PROFILE, new ResolvableProfile(profile));
+        skull.set(DataComponents.PROFILE, ResolvableProfile.createResolved(profile));
         return skull;
     }
 }

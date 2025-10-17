@@ -44,7 +44,7 @@ public class NearCommand extends ModCommand<NearModule> {
         var list = new ArrayList<ClosePlayers>();
 
         var sourcePos = sourcePlayer.position();
-        sourcePlayer.serverLevel().players().forEach(targetPlayer -> {
+        sourcePlayer.level().players().forEach(targetPlayer -> {
             var targetPos = targetPlayer.position();
             if (!sourcePlayer.getUUID().equals(targetPlayer.getUUID()) && sourcePos.closerThan(targetPos, range)) {
                 var distance = sourcePos.distanceTo(targetPos);

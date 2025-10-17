@@ -47,9 +47,9 @@ public class IgnoreListCommand extends ModCommand<IgnoreModule> {
                         }
 
                         String playerName;
-                        var gameProfile = context.getSource().getServer().getProfileCache().get(ignoreList.get(i));
+                        var gameProfile = context.getSource().getServer().services().profileResolver().fetchById(ignoreList.get(i));
                         if (gameProfile.isPresent()) {
-                            playerName = gameProfile.get().getName();
+                            playerName = gameProfile.get().name();
                         } else {
                             playerName = ignoreList.get(i).toString();
                         }

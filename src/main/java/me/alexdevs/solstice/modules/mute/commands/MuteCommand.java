@@ -49,7 +49,7 @@ public class MuteCommand extends ModCommand<MuteModule> {
         var date = calendar.getTime();
 
         targets.forEach(profile -> {
-            var playerData = module.getPlayerData(profile.getId());
+            var playerData = module.getPlayerData(profile.id());
             playerData.muted = true;
             if (timespan != 0) {
                 playerData.mutedUntil = date;
@@ -76,7 +76,7 @@ public class MuteCommand extends ModCommand<MuteModule> {
 
         var placeholders = Map.of(
                 "count", Component.nullToEmpty(String.valueOf(targets.size())),
-                "player", Component.nullToEmpty(targets.stream().findFirst().get().getName()),
+                "player", Component.nullToEmpty(targets.stream().findFirst().get().name()),
                 "timespan", Component.nullToEmpty(TimeSpan.toLongString(timespan))
         );
 

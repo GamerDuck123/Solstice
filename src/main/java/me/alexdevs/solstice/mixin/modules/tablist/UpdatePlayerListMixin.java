@@ -23,7 +23,7 @@ public abstract class UpdatePlayerListMixin {
     private void solstice$updatePlayerList(CallbackInfo ci) {
         if (Solstice.configManager.getData(TabListConfig.class).enable) {
             var packet = new ClientboundPlayerInfoUpdatePacket(EnumSet.of(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME, ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LISTED), List.of(this.player));
-            this.player.getServer().getPlayerList().broadcastAll(packet);
+            this.player.level().getServer().getPlayerList().broadcastAll(packet);
         }
     }
 }

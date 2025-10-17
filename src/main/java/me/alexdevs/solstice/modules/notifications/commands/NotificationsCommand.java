@@ -35,7 +35,7 @@ public class NotificationsCommand extends ModCommand<NotificationsModule> {
                 .then(Commands.literal("set")
                         .then(Commands.literal("sound")
                                 .then(Commands.argument("sound", ResourceLocationArgument.id())
-                                        .suggests(SuggestionProviders.AVAILABLE_SOUNDS)
+//                                        .suggests(SuggestionProviders.AVAILABLE_SOUNDS.)
                                         .executes(this::setSound)
                                 )
                         )

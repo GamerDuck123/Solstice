@@ -12,14 +12,15 @@ import net.minecraft.server.players.UserBanListEntry;
 
 import java.text.SimpleDateFormat;
 import java.util.Map;
+import java.util.UUID;
 
 public class BanMessageFormatter {
-    public static Component format(GameProfile profile, UserBanListEntry entry) {
+    public static Component format(GameProfile userID, UserBanListEntry entry) {
         var locale = ModuleProvider.BAN.locale();
         var coreConfig = CoreModule.getConfig();
         var df = new SimpleDateFormat(coreConfig.dateTimeFormat);
 
-        var context = PlaceholderContext.of(profile, Solstice.server);
+        var context = PlaceholderContext.of(userID, Solstice.server);
         var expiryDate = Component.nullToEmpty(entry.getExpires() != null ? df.format(entry.getExpires()) : "never");
         Map<String, Component> placeholders = Map.of(
                 "reason", Format.parse(entry.getReason(), context),

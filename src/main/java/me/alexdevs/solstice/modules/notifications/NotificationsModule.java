@@ -33,12 +33,12 @@ public class NotificationsModule extends ModuleBase.Toggleable {
         ServerMessageEvents.CHAT_MESSAGE.register((message, sender, parameters) -> {
             var content = message.decoratedContent().getString().toLowerCase();
 
-            sender.getServer().getPlayerList().getPlayers().forEach(player -> {
+            sender.level().getServer().getPlayerList().getPlayers().forEach(player -> {
                 if (player.equals(sender)) {
                     return;
                 }
 
-                var playerName = player.getGameProfile().getName().toLowerCase();
+                var playerName = player.getGameProfile().name().toLowerCase();
                 if (content.contains(playerName)) {
                     var settings = getPlayerSettings(player);
                     if (settings.onChat()) {

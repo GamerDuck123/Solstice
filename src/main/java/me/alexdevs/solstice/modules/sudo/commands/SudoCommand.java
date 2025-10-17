@@ -13,6 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.phys.Vec2;
+
+import java.net.URI;
 import java.util.List;
 
 import static net.minecraft.commands.Commands.argument;
@@ -43,7 +45,7 @@ public class SudoCommand extends ModCommand<SudoModule> {
                         .executes(context -> {
                             if (!Permissions.check(context.getSource(), getPermissionNode("sudo"), 4)) {
                                 context.getSource().sendFailure(Component.literal(String.format("%s is not in the sudoers file. This incident will be reported.", context.getSource().getTextName()))
-                                        .setStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://xkcd.com/838/"))));
+                                        .setStyle(Style.EMPTY.withClickEvent(new ClickEvent.OpenUrl(URI.create("https://xkcd.com/838/")))));
                                 return 1;
                             }
                             var command = StringArgumentType.getString(context, "command");
@@ -52,7 +54,7 @@ public class SudoCommand extends ModCommand<SudoModule> {
 
                             CommandSource commandOutput;
                             if (context.getSource().isPlayer()) {
-                                commandOutput = context.getSource().getPlayer();
+                                commandOutput = context.getSource().getPlayer().commandSource();
                             } else {
                                 commandOutput = context.getSource().getServer();
                             }
@@ -69,7 +71,7 @@ public class SudoCommand extends ModCommand<SudoModule> {
     public CommandSourceStack buildServerSource(CommandSource commandOutput, MinecraftServer server) {
         return new CommandSourceStack(
                 commandOutput,
-                server.overworld().getSharedSpawnPos().getCenter(),
+                server.overworld().getRespawnData().pos().getCenter(),
                 Vec2.ZERO,
                 server.overworld(),
                 4,

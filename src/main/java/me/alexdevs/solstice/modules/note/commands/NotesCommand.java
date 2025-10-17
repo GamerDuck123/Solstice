@@ -62,7 +62,7 @@ public class NotesCommand extends ModCommand<NoteModule> {
 
     private int listNotes(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var user = LocalGameProfile.getProfile(context, "user");
-        var notes = module.getNotes(user.getId());
+        var notes = module.getNotes(user.id());
 
         if (notes.isEmpty()) {
             context.getSource().sendSuccess(() -> module.locale().get("emptyNotes"), false);
@@ -71,7 +71,7 @@ public class NotesCommand extends ModCommand<NoteModule> {
 
         var output = Component.empty()
                 .append(module.locale().get("noteListHeader", Map.of(
-                        "user", Component.nullToEmpty(user.getName())
+                        "user", Component.nullToEmpty(user.name())
                 )))
                 .append(Component.nullToEmpty("\n"));
 
@@ -84,7 +84,7 @@ public class NotesCommand extends ModCommand<NoteModule> {
             var checkButton = Components.button(
                     module.locale().raw("checkButton"),
                     module.locale().raw("hoverCheck"),
-                    "/notes " + user.getName() + " check " + i
+                    "/notes " + user.name() + " check " + i
             );
 
             var senderName = CoreModule.getUsername(note.createdBy);
@@ -108,7 +108,7 @@ public class NotesCommand extends ModCommand<NoteModule> {
 
     private int checkNote(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var user = LocalGameProfile.getProfile(context, "user");
-        var notes = module.getNotes(user.getId());
+        var notes = module.getNotes(user.id());
         var index = IntegerArgumentType.getInteger(context, "index");
 
         if (index < 0 || index >= notes.size()) {
@@ -121,7 +121,7 @@ public class NotesCommand extends ModCommand<NoteModule> {
         var deleteButton = Components.button(
                 module.locale().raw("deleteButton"),
                 module.locale().raw("hoverDelete"),
-                "/note " + user.getName() + " delete " + index
+                "/note " + user.name() + " delete " + index
         );
 
         var operator = CoreModule.getUsername(note.createdBy);
@@ -140,7 +140,7 @@ public class NotesCommand extends ModCommand<NoteModule> {
 
     private int deleteNote(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var user = LocalGameProfile.getProfile(context, "user");
-        var notes = module.getNotes(user.getId());
+        var notes = module.getNotes(user.id());
         var index = IntegerArgumentType.getInteger(context, "index");
 
         if (index < notes.size()) {
@@ -164,7 +164,7 @@ public class NotesCommand extends ModCommand<NoteModule> {
         var message = StringArgumentType.getString(context, "message");
 
         var note = new Note(message, operatorId);
-        var notes = module.getNotes(user.getId());
+        var notes = module.getNotes(user.id());
 
         notes.add(note);
         var index = notes.size() - 1;
@@ -174,11 +174,11 @@ public class NotesCommand extends ModCommand<NoteModule> {
         var checkButton = Components.button(
                 module.locale().raw("checkButton"),
                 module.locale().raw("hoverCheck"),
-                "/notes " + user.getName() + " check " + index
+                "/notes " + user.name() + " check " + index
         );
         final var text = module.locale().get("addedNotification", Map.of(
                 "operator", context.getSource().getDisplayName(),
-                "user", Component.nullToEmpty(user.getName()),
+                "user", Component.nullToEmpty(user.name()),
                 "checkButton", checkButton
         ));
 
@@ -194,11 +194,11 @@ public class NotesCommand extends ModCommand<NoteModule> {
     private int clearNotes(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var user = LocalGameProfile.getProfile(context, "user");
 
-        var notes = module.getNotes(user.getId());
+        var notes = module.getNotes(user.id());
         notes.clear();
 
         context.getSource().sendSuccess(() -> module.locale().get("notesCleared", Map.of(
-                "user", Component.nullToEmpty(user.getName())
+                "user", Component.nullToEmpty(user.name())
         )), true);
 
         return 1;

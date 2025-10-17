@@ -119,11 +119,11 @@ public class TeleportRequestModule extends ModuleBase.Toggleable {
                 "acceptButton", Components.button(
                         locale().raw("~accept"),
                         locale().raw("~accept.hover"),
-                        "/tpaccept " + source.getGameProfile().getName()),
+                        "/tpaccept " + source.getGameProfile().name()),
                 "refuseButton", Components.button(
                         locale().raw("~refuse"),
                         locale().raw("~refuse.hover"),
-                        "/tpdeny " + source.getGameProfile().getName())
+                        "/tpdeny " + source.getGameProfile().name())
         );
 
         target.sendSystemMessage(locale().get(
@@ -151,11 +151,11 @@ public class TeleportRequestModule extends ModuleBase.Toggleable {
                 "acceptButton", Components.button(
                         locale().raw("~accept"),
                         locale().raw("~accept.hover"),
-                        "/tpaccept " + source.getGameProfile().getName()),
+                        "/tpaccept " + source.getGameProfile().name()),
                 "refuseButton", Components.button(
                         locale().raw("~refuse"),
                         locale().raw("~refuse.hover"),
-                        "/tpdeny " + source.getGameProfile().getName())
+                        "/tpdeny " + source.getGameProfile().name())
         );
 
         target.sendSystemMessage(locale().get(

@@ -28,7 +28,7 @@ import java.util.function.Consumer;
 
 public class Locator {
 
-    public static final TicketType<BlockPos> RTP_TICKET = TicketType.create("rtp", Comparator.comparingLong(ChunkPos::asLong), 300);
+    public static final TicketType RTP_TICKET = TicketType.FORCED;
 
     public final ServerPlayer player;
     public final ServerLevel world;
@@ -122,7 +122,7 @@ public class Locator {
     }
 
     private BlockPos getEmptySpace(BlockPos pos) {
-        var bottom = chunk.getMinBuildHeight();
+        var bottom = chunk.getMinY();
         var top = world.getLogicalHeight();
         var blockPos = new BlockPos.MutableBlockPos(pos.getX(), top, pos.getZ());
 
@@ -151,10 +151,10 @@ public class Locator {
 
             var dx = i % 16;
             var dz = i / 16;
-            pos = chunk.getPos().getBlockAt(dx, chunk.getMinBuildHeight(), dz);
+            pos = chunk.getPos().getBlockAt(dx, chunk.getMinY(), dz);
         }
 
-        if (pos.getY() <= chunk.getMinBuildHeight()) {
+        if (pos.getY() <= chunk.getMinY()) {
             callback.accept(new Result(Result.Type.UNSAFE, Optional.empty()));
             return;
         }
@@ -167,7 +167,7 @@ public class Locator {
     }
 
     private void load() {
-        world.getChunkSource().addRegionTicket(RTP_TICKET, new ChunkPos(attemptPos), 0, attemptPos);
+        world.getChunkSource().addTicketAndLoadWithRadius(RTP_TICKET, new ChunkPos(attemptPos), 0);
     }
 
     private Optional<LevelChunk> getChunk(ChunkPos pos) {

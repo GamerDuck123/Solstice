@@ -32,7 +32,7 @@ public class DoAsCommand extends ModCommand<SudoModule> {
 
     public static CommandSourceStack buildPlayerSource(CommandSource commandOutput, MinecraftServer server, ServerPlayer player) {
         var opList = server.getPlayerList().getOps();
-        var operator = opList.get(player.getGameProfile());
+        var operator = opList.get(player.nameAndId());
         int opLevel = 0;
         if (operator != null) {
             opLevel = operator.getLevel();
@@ -41,7 +41,7 @@ public class DoAsCommand extends ModCommand<SudoModule> {
                 commandOutput,
                 player.position(),
                 player.getRotationVector(),
-                player.serverLevel(),
+                player.level(),
                 opLevel,
                 player.getScoreboardName(),
                 player.getDisplayName(),
@@ -75,7 +75,7 @@ public class DoAsCommand extends ModCommand<SudoModule> {
 
                                     CommandSource commandOutput;
                                     if (context.getSource().isPlayer()) {
-                                        commandOutput = context.getSource().getPlayer();
+                                        commandOutput = context.getSource().getPlayer().commandSource();
                                     } else {
                                         commandOutput = context.getSource().getServer();
                                     }

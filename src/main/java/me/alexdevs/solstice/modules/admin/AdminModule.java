@@ -17,7 +17,7 @@ public class AdminModule extends ModuleBase {
             try {
                 return Permissions.check(profile, getWhitelistBypassPermission(), false).get();
             } catch (Exception e) {
-                Solstice.LOGGER.error("Error checking whitelist bypass for profile {}", profile.getId(), e);
+                Solstice.LOGGER.error("Error checking whitelist bypass for profile {}", profile, e);
             }
             return false;
         });
@@ -26,7 +26,7 @@ public class AdminModule extends ModuleBase {
             try {
                 return Permissions.check(profile, getFullServerBypassPermission(), false).get();
             } catch (Exception e) {
-                Solstice.LOGGER.error("Error checking full server bypass for profile {}", profile.getId(), e);
+                Solstice.LOGGER.error("Error checking full server bypass for profile {}", profile, e);
             }
             return false;
         });

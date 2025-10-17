@@ -18,6 +18,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.players.NameAndId;
 import net.minecraft.server.players.UserBanListEntry;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,28 +36,29 @@ public class BanCommand extends ModCommand<BanModule> {
         super(module);
     }
 
-    static int execute(CommandContext<CommandSourceStack> context, Collection<GameProfile> targets, @Nullable String reason, @Nullable Date expiryDate) throws CommandSyntaxException {
+    static int execute(CommandContext<CommandSourceStack> context, Collection<NameAndId> targets, @Nullable String reason, @Nullable Date expiryDate) throws CommandSyntaxException {
         var source = context.getSource();
         var server = source.getServer();
         var banList = server.getPlayerList().getBans();
 
         var banCounter = 0;
-        for (GameProfile target : targets) {
+        for (NameAndId target : targets) {
             if (banList.isBanned(target)) {
                 continue;
             }
 
+            var gameProfile = new GameProfile(target.id(), target.name());
             var banEntry = new UserBanListEntry(target, null, source.getTextName(), expiryDate, reason);
             banList.add(banEntry);
             banCounter++;
 
-            var playerContext = PlaceholderContext.of(target, server);
+            var playerContext = PlaceholderContext.of(gameProfile, server);
 
-            source.sendSuccess(() -> Component.translatable("commands.ban.success", Component.nullToEmpty(target.getName()), Format.parse(banEntry.getReason(), playerContext)), true);
+            source.sendSuccess(() -> Component.translatable("commands.ban.success", Component.nullToEmpty(target.name()), Format.parse(banEntry.getReason(), playerContext)), true);
 
-            var serverPlayerEntity = source.getServer().getPlayerList().getPlayer(target.getId());
+            var serverPlayerEntity = source.getServer().getPlayerList().getPlayer(target.id());
             if (serverPlayerEntity != null) {
-                serverPlayerEntity.connection.disconnect(BanMessageFormatter.format(target, banEntry));
+                serverPlayerEntity.connection.disconnect(BanMessageFormatter.format(gameProfile, banEntry));
             }
         }
 

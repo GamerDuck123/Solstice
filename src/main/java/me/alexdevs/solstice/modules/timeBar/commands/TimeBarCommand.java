@@ -107,8 +107,8 @@ public class TimeBarCommand extends ModCommand<TimeBarModule> {
         context.getSource().sendSuccess(() -> Component
                 .literal("New time bar created with UUID ")
                 .append(Component.literal(bar.getUuid().toString()).setStyle(Style.EMPTY
-                        .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.nullToEmpty("Click to copy")))
-                        .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, bar.getUuid().toString())))), true);
+                        .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty("Click to copy")))
+                        .withClickEvent(new ClickEvent.CopyToClipboard(bar.getUuid().toString())))), true);
 
         return 1;
     }

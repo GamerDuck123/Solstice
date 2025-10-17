@@ -4,6 +4,8 @@ import com.mojang.authlib.GameProfile;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 
+import java.util.UUID;
+
 public class PlayerConnectionEvents {
     public static final Event<WhitelistBypass> WHITELIST_BYPASS = EventFactory.createArrayBacked(WhitelistBypass.class, callbacks ->
             (profile) -> {
@@ -27,11 +29,11 @@ public class PlayerConnectionEvents {
 
     @FunctionalInterface
     public interface WhitelistBypass {
-        boolean bypassWhitelist(GameProfile profile);
+        boolean bypassWhitelist(UUID userID);
     }
 
     @FunctionalInterface
     public interface FullServerBypass {
-        boolean bypassFullServer(GameProfile profile);
+        boolean bypassFullServer(UUID userID);
     }
 }

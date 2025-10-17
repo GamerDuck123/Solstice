@@ -60,7 +60,7 @@ public class EnderChestCommand extends ModCommand<EnderChestModule> {
                                     return;
                                 }
 
-                                var isOnline = PlayerUtils.isOnline(profile.getId());
+                                var isOnline = PlayerUtils.isOnline(profile.id());
                                 if (!isOnline && !Permissions.check(player, getPermissionNode("offline"), 3)) {
                                     source.sendSuccess(() -> module.locale().get("offlineNotAllowed"), false);
                                     return;
@@ -69,7 +69,7 @@ public class EnderChestCommand extends ModCommand<EnderChestModule> {
                                 ServerPlayer targetPlayer;
 
                                 if (isOnline) {
-                                    targetPlayer = source.getServer().getPlayerList().getPlayer(profile.getId());
+                                    targetPlayer = source.getServer().getPlayerList().getPlayer(profile.id());
                                 } else {
                                     targetPlayer = PlayerUtils.loadOfflinePlayer(profile);
                                 }
@@ -79,7 +79,7 @@ public class EnderChestCommand extends ModCommand<EnderChestModule> {
                                 var canEdit = Permissions.check(player, getPermissionNode("edit"), 3);
 
                                 var map = Map.of(
-                                        "player", Component.nullToEmpty(profile.getName())
+                                        "player", Component.nullToEmpty(profile.name())
                                 );
                                 var title = module.locale().get("title", map);
 

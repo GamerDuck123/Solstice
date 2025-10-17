@@ -36,7 +36,7 @@ public class CheckJailCommand extends ModCommand<JailModule> {
                         .suggests(LocalGameProfile::suggest)
                         .executes(context -> {
                             var user = LocalGameProfile.getProfile(context, "user");
-                            var data = module.getPlayer(user.getId());
+                            var data = module.getPlayer(user.id());
 
                             if (!data.jailed) {
                                 context.getSource().sendSuccess(() -> module.locale().get("notJailed"), false);
@@ -47,9 +47,9 @@ public class CheckJailCommand extends ModCommand<JailModule> {
                             if (new UUID(0, 0).equals(data.jailedBy)) {
                                 operator = "Server";
                             } else {
-                                var opProfile = context.getSource().getServer().getProfileCache().get(data.jailedBy);
+                                var opProfile = context.getSource().getServer().services().profileResolver().fetchById(data.jailedBy);
                                 if (opProfile.isPresent()) {
-                                    operator = opProfile.get().getName();
+                                    operator = opProfile.get().name();
                                 } else {
                                     operator = data.jailedBy != null ? data.jailedBy.toString() : "Unknown";
                                 }
@@ -73,7 +73,7 @@ public class CheckJailCommand extends ModCommand<JailModule> {
                             var df = new SimpleDateFormat(coreConfig.dateTimeFormat);
 
                             var map = Map.of(
-                                    "player", Component.nullToEmpty(user.getName()),
+                                    "player", Component.nullToEmpty(user.name()),
                                     "jail", Component.nullToEmpty(data.jailName),
                                     "operator", Component.nullToEmpty(operator),
                                     "reason", Component.nullToEmpty(reason),

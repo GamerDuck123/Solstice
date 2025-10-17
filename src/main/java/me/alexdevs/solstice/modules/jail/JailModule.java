@@ -14,7 +14,6 @@ import me.alexdevs.solstice.modules.jail.data.JailConfig;
 import me.alexdevs.solstice.modules.jail.data.JailLocale;
 import me.alexdevs.solstice.modules.jail.data.JailPlayerData;
 import me.alexdevs.solstice.modules.jail.data.JailServerData;
-import me.alexdevs.solstice.modules.spawn.SpawnModule;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.*;
@@ -24,7 +23,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 
 import java.util.Map;
 import java.util.UUID;
@@ -89,7 +87,7 @@ public class JailModule extends ModuleBase.Toggleable {
 
         AttackBlockCallback.EVENT.register((player, world, hand, blockPos, direction) -> {
             if (isPlayerJailed(player.getUUID())) {
-                player.sendSystemMessage(locale().get("cannotBreakBlocks"));
+                ((ServerPlayer)player).sendSystemMessage(locale().get("cannotBreakBlocks"));
                 return InteractionResult.FAIL;
             }
             return InteractionResult.PASS;
@@ -97,7 +95,7 @@ public class JailModule extends ModuleBase.Toggleable {
 
         AttackEntityCallback.EVENT.register((player, world, hand, entity, entityHitResult) -> {
             if (isPlayerJailed(player.getUUID())) {
-                player.sendSystemMessage(locale().get("cannotAttackEntities"));
+                ((ServerPlayer)player).sendSystemMessage(locale().get("cannotAttackEntities"));
                 return InteractionResult.FAIL;
             }
             return InteractionResult.PASS;
@@ -105,7 +103,7 @@ public class JailModule extends ModuleBase.Toggleable {
 
         PlayerBlockBreakEvents.BEFORE.register((world, player, blockPos, blockState, blockEntity) -> {
             if (isPlayerJailed(player.getUUID())) {
-                player.sendSystemMessage(locale().get("cannotBreakBlocks"));
+                ((ServerPlayer)player).sendSystemMessage(locale().get("cannotBreakBlocks"));
                 return false;
             }
 
@@ -114,7 +112,7 @@ public class JailModule extends ModuleBase.Toggleable {
 
         UseBlockCallback.EVENT.register((player, world, hand, blockHitResult) -> {
             if (isPlayerJailed(player.getUUID())) {
-                player.sendSystemMessage(locale().get("cannotUseBlocks"));
+                ((ServerPlayer)player).sendSystemMessage(locale().get("cannotUseBlocks"));
                 return InteractionResult.FAIL;
             }
             return InteractionResult.PASS;
@@ -122,7 +120,7 @@ public class JailModule extends ModuleBase.Toggleable {
 
         UseEntityCallback.EVENT.register((player, world, hand, entity, entityHitResult) -> {
             if (isPlayerJailed(player.getUUID())) {
-                player.sendSystemMessage(locale().get("cannotUseEntities"));
+                ((ServerPlayer)player).sendSystemMessage(locale().get("cannotUseEntities"));
                 return InteractionResult.FAIL;
             }
             return InteractionResult.PASS;
@@ -131,10 +129,10 @@ public class JailModule extends ModuleBase.Toggleable {
         UseItemCallback.EVENT.register((player, world, hand) -> {
             var stack = player.getItemInHand(hand);
             if (isPlayerJailed(player.getUUID())) {
-                player.sendSystemMessage(locale().get("cannotUseItems"));
-                return InteractionResultHolder.fail(stack);
+                ((ServerPlayer)player).sendSystemMessage(locale().get("cannotUseItems"));
+                return InteractionResult.FAIL;
             }
-            return InteractionResultHolder.pass(stack);
+            return InteractionResult.PASS;
         });
 
         ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((signedMessage, player, parameters) -> {

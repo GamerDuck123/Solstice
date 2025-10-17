@@ -131,7 +131,7 @@ public class TellModule extends ModuleBase.Toggleable {
         }
 
         source.getServer().getPlayerList().getPlayers().forEach(player -> {
-            var playerName = player.getGameProfile().getName();
+            var playerName = player.getGameProfile().name();
             if (playerName.equals(targetName) || playerName.equals(source.getTextName())) {
                 return;
             }

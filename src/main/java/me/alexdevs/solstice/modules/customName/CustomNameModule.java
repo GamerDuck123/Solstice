@@ -46,7 +46,7 @@ public class CustomNameModule extends ModuleBase.Toggleable {
             }
         }
 
-        var isOperator = player.getServer().getPlayerList().isOp(player.getGameProfile());
+        var isOperator = player.level().getServer().getPlayerList().isOp(player.nameAndId());
 
         if (format == null) {
             format = "${username}";
@@ -69,7 +69,7 @@ public class CustomNameModule extends ModuleBase.Toggleable {
     public String getResolvedUsername(ServerPlayer player) {
         var format = fetchUsernameFormat(player);
         var playerData = Solstice.playerData.get(player).getData(CustomNamePlayerData.class);
-        var name = playerData.nickname == null ? player.getGameProfile().getName() : playerData.nickname;
+        var name = playerData.nickname == null ? player.getGameProfile().name() : playerData.nickname;
 
         var prefix = LuckPermsIntegration.getPrefix(player);
         var suffix = LuckPermsIntegration.getSuffix(player);

@@ -48,7 +48,7 @@ public class ActiveTimeCommand extends ModCommand<AfkModule> {
                                 .suggests(LocalGameProfile::suggest)
                                 .executes(context -> {
                                     var profile = LocalGameProfile.getProfile(context, "player");
-                                    var activeTime = module.getActiveTime(profile.getId());
+                                    var activeTime = module.getActiveTime(profile.id());
 
                                     if (activeTime == 0) {
                                         context.getSource().sendSuccess(() -> module.locale().get("neverPlayed"), false);
@@ -59,7 +59,7 @@ public class ActiveTimeCommand extends ModCommand<AfkModule> {
 
                                     var map = Map.of(
                                             "activeTime", Component.nullToEmpty(longSpan),
-                                            "player", Component.nullToEmpty(profile.getName())
+                                            "player", Component.nullToEmpty(profile.name())
                                     );
 
                                     context.getSource().sendSuccess(() -> module.locale().get("playerActiveTime", map), false);
@@ -106,11 +106,11 @@ public class ActiveTimeCommand extends ModCommand<AfkModule> {
                                             var profile = LocalGameProfile.getProfile(context, "player");
                                             var time = TimeSpan.getTimeSpan(context, "time");
 
-                                            var data = module.getPlayerData(profile.getId());
+                                            var data = module.getPlayerData(profile.id());
                                             data.activeTime = time;
 
                                             var map = Map.of(
-                                                    "player", Component.nullToEmpty(profile.getName()),
+                                                    "player", Component.nullToEmpty(profile.name()),
                                                     "time", Component.nullToEmpty(TimeSpan.toLongString(time))
                                             );
                                             context.getSource().sendSuccess(() -> module.locale().get("activeTimeSet", map), true);

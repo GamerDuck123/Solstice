@@ -60,8 +60,8 @@ public class JailCommand extends ModCommand<JailModule> {
         var source = context.getSource();
         var profile = LocalGameProfile.getProfile(context, "user");
 
-        var data = module.getPlayer(profile.getId());
-        var coreData = Solstice.playerData.get(profile.getId()).getData(CorePlayerData.class);
+        var data = module.getPlayer(profile.id());
+        var coreData = Solstice.playerData.get(profile.id()).getData(CorePlayerData.class);
 
         if (data.jailed) {
             source.sendSuccess(() -> module.locale().get("alreadyJailed"), false);
@@ -82,7 +82,7 @@ public class JailCommand extends ModCommand<JailModule> {
                 return;
             }
 
-            var player = source.getServer().getPlayerList().getPlayer(profile.getId());
+            var player = source.getServer().getPlayerList().getPlayer(profile.id());
 
             data.jailed = true;
             data.jailedBy = source.isPlayer() ? source.getPlayer().getUUID() : new UUID(0L, 0L);
@@ -98,7 +98,7 @@ public class JailCommand extends ModCommand<JailModule> {
             }
 
             var map = Map.of(
-                    "player", Component.nullToEmpty(profile.getName()),
+                    "player", Component.nullToEmpty(profile.name()),
                     "jail", Component.nullToEmpty(jailName),
                     "duration", Component.nullToEmpty(TimeSpan.toLongString(seconds)),
                     "reason", Component.nullToEmpty(reason)

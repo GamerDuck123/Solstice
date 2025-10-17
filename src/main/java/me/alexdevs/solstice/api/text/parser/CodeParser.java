@@ -45,9 +45,9 @@ public class CodeParser implements NodeParser {
                         .append(display)
                         .setStyle(Style.EMPTY
                                 .withHoverEvent(
-                                        new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover)
+                                        new HoverEvent.ShowText(hover)
                                 )
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, content))
+                                .withClickEvent(new ClickEvent.CopyToClipboard(content))
                         );
 
                 list.add(new DirectTextNode(text));

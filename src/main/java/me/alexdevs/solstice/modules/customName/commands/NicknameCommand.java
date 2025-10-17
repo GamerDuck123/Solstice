@@ -107,14 +107,14 @@ public class NicknameCommand extends ModCommand<CustomNameModule> {
         }
 
         module.setCustomName(
-                profile.getId(),
+                profile.id(),
                 nickname,
                 hasAdvancedPermissionOthers(context.getSource())
         );
 
         var map = Map.of(
-                "player", Component.nullToEmpty(profile.getName()),
-                "nickname", Component.nullToEmpty(module.getCustomName(profile.getId()))
+                "player", Component.nullToEmpty(profile.name()),
+                "nickname", Component.nullToEmpty(module.getCustomName(profile.id()))
         );
         context.getSource().sendSuccess(() -> module.locale().get("setOther", map), true);
 
@@ -124,11 +124,11 @@ public class NicknameCommand extends ModCommand<CustomNameModule> {
     private int executeClearOthers(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         var profile = LocalGameProfile.getProfile(context, "player");
 
-        module.clearCustomName(profile.getId());
+        module.clearCustomName(profile.id());
 
         var map = Map.of(
-                "player", Component.nullToEmpty(profile.getName()),
-                "nickname", Component.nullToEmpty(module.getCustomName(profile.getId()))
+                "player", Component.nullToEmpty(profile.name()),
+                "nickname", Component.nullToEmpty(module.getCustomName(profile.id()))
         );
         context.getSource().sendSuccess(() -> module.locale().get("clearedOther", map), true);
 

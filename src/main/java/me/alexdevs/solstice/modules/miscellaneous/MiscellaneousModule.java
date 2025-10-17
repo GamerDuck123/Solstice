@@ -47,7 +47,7 @@ public class MiscellaneousModule extends ModuleBase.Toggleable {
 
         EntitySleepEvents.ALLOW_RESETTING_TIME.register(player -> {
             if (commandSleeping.getOrDefault(player.getUUID(), false)) {
-                return !player.level().isDay();
+                return player.level().isDarkOutside();
             }
 
             return true;
@@ -69,7 +69,7 @@ public class MiscellaneousModule extends ModuleBase.Toggleable {
         commandSleeping.put(entity.getUUID(), true);
         entity.startSleeping(entity.blockPosition());
         if (entity instanceof ServerPlayer player) {
-            player.serverLevel().updateSleepingPlayerList();
+            player.level().updateSleepingPlayerList();
         }
     }
 }

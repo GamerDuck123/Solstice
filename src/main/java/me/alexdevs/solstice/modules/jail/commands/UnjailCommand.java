@@ -31,17 +31,17 @@ public class UnjailCommand extends ModCommand<JailModule> {
                         .executes(context -> {
                             var profile = LocalGameProfile.getProfile(context, "user");
 
-                            var data = module.getPlayer(profile.getId());
+                            var data = module.getPlayer(profile.id());
 
                             if (!data.jailed) {
                                 context.getSource().sendSuccess(() -> module.locale().get("notJailed"), false);
                                 return 0;
                             }
 
-                            module.unjailPlayer(profile.getId());
+                            module.unjailPlayer(profile.id());
 
                             var map = Map.of(
-                                    "player", Component.nullToEmpty(profile.getName())
+                                    "player", Component.nullToEmpty(profile.name())
                             );
                             context.getSource().sendSuccess(() -> module.locale().get("unjailed", map), false);
 

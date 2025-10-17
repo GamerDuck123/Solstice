@@ -86,12 +86,12 @@ public class HomesCommand extends ModCommand<HomeModule> {
         var player = context.getSource().getPlayerOrException();
         var playerContext = PlaceholderContext.of(player);
 
-        var data = module.getData(profile.getId());
+        var data = module.getData(profile.id());
         var homeList = data.homes.keySet().stream().sorted().toList();
 
         if (homeList.isEmpty()) {
             var placeholders = Map.of(
-                    "owner", Component.nullToEmpty(profile.getName())
+                    "owner", Component.nullToEmpty(profile.name())
             );
             context.getSource().sendSuccess(() -> module.locale().get(
                     "noHomesOther",
@@ -109,7 +109,7 @@ public class HomesCommand extends ModCommand<HomeModule> {
             }
             var placeholders = Map.of(
                     "home", Component.nullToEmpty(homeList.get(i)),
-                    "owner", Component.nullToEmpty(profile.getName())
+                    "owner", Component.nullToEmpty(profile.name())
             );
 
             listText = listText.append(module.locale().get(
@@ -121,7 +121,7 @@ public class HomesCommand extends ModCommand<HomeModule> {
 
         var placeholders = Map.of(
                 "homeList", listText,
-                "owner", Component.nullToEmpty(profile.getName())
+                "owner", Component.nullToEmpty(profile.name())
         );
         context.getSource().sendSuccess(() -> module.locale().get(
                 "homeListOther",

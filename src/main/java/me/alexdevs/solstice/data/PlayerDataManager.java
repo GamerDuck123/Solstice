@@ -69,7 +69,7 @@ public class PlayerDataManager {
      * @return player data
      */
     public PlayerData get(GameProfile profile) {
-        return get(profile.getId());
+        return get(profile.id());
     }
 
     /**

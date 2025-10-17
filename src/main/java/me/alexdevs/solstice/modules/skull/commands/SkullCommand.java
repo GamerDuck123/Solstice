@@ -27,7 +27,7 @@ public class SkullCommand extends ModCommand<SkullModule> {
     public LiteralArgumentBuilder<CommandSourceStack> command(String name) {
         return literal(name)
                 .requires(require(2))
-                .executes(context -> execute(context, context.getSource().getPlayerOrException().getGameProfile().getName()))
+                .executes(context -> execute(context, context.getSource().getPlayerOrException().getGameProfile().name()))
                 .then(argument("name", StringArgumentType.word())
                         .executes(context -> execute(context, StringArgumentType.getString(context, "name"))));
     }

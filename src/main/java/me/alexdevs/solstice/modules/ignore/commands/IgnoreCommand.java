@@ -34,41 +34,40 @@ public class IgnoreCommand extends ModCommand<IgnoreModule> {
                         .suggests((context, builder) -> {
                             var player = context.getSource().getPlayerOrException();
                             var playerManager = context.getSource().getServer().getPlayerList();
-                            return SharedSuggestionProvider.suggest(Arrays.stream(playerManager.getPlayerNamesArray()).filter(s -> !s.equals(player.getGameProfile().getName())), builder);
+                            return SharedSuggestionProvider.suggest(Arrays.stream(playerManager.getPlayerNamesArray()).filter(s -> !s.equals(player.getGameProfile().name())), builder);
                         })
                         .executes(context -> {
                             var player = context.getSource().getPlayerOrException();
 
                             var targetName = StringArgumentType.getString(context, "target");
 
-                            context.getSource().getServer().getProfileCache().getAsync(targetName).thenAcceptAsync(profileOpt -> {
+                            context.getSource().getServer().services().profileResolver().fetchByName(targetName).ifPresentOrElse(profile -> {
                                 var playerContext = PlaceholderContext.of(player);
 
-                                if (profileOpt.isEmpty()) {
-                                    context.getSource().sendSuccess(() -> module.locale().get("playerNotFound", playerContext), false);
-                                    return;
-                                }
+                                // Moved to the orElse part
+//                                if (profileOpt.isEmpty()) {
+//                                    context.getSource().sendSuccess(() -> module.locale().get("playerNotFound", playerContext), false);
+//                                    return;
+//                                }
 
-                                var profile = profileOpt.get();
-
-                                if (profile.getId().equals(player.getGameProfile().getId())) {
+                                if (profile.id().equals(player.getGameProfile().id())) {
                                     context.getSource().sendSuccess(() -> module.locale().get("targetIsSelf", playerContext), false);
                                     return;
                                 }
 
                                 var playerData = module.getPlayerData(player.getUUID());
 
-                                var map = Map.of("targetName", Component.nullToEmpty(profile.getName()));
+                                var map = Map.of("targetName", Component.nullToEmpty(profile.name()));
 
-                                if (playerData.ignoredPlayers.contains(profile.getId())) {
-                                    playerData.ignoredPlayers.remove(profile.getId());
+                                if (playerData.ignoredPlayers.contains(profile.id())) {
+                                    playerData.ignoredPlayers.remove(profile.id());
                                     context.getSource().sendSuccess(() -> module.locale().get("unblockedPlayer", playerContext, map), false);
 
                                 } else {
-                                    playerData.ignoredPlayers.add(profile.getId());
+                                    playerData.ignoredPlayers.add(profile.id());
                                     context.getSource().sendSuccess(() -> module.locale().get("blockedPlayer", playerContext, map), false);
                                 }
-                            });
+                            }, () -> context.getSource().sendSuccess(() -> module.locale().get("playerNotFound", PlaceholderContext.of(player)), false));
 
                             return 1;
                         }));

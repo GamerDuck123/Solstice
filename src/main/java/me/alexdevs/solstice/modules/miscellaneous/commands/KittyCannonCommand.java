@@ -8,8 +8,8 @@ import me.alexdevs.solstice.modules.miscellaneous.MiscellaneousModule;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +33,7 @@ public class KittyCannonCommand extends ModCommand<MiscellaneousModule> {
                 .executes(context -> {
                     final var player = context.getSource().getPlayerOrException();
 
-                    final var world = player.serverLevel();
+                    final var world = player.level();
 
                     BALL.create(world, entity -> {
                         entity.setDeltaMovement(player.getLookAngle().scale(3.5));
@@ -45,7 +45,7 @@ public class KittyCannonCommand extends ModCommand<MiscellaneousModule> {
                             DummyExplosion.spawn(world, pos, 0);
                             entity.remove(Entity.RemovalReason.DISCARDED);
                         }, 1, TimeUnit.SECONDS);
-                    }, player.blockPosition().above(), MobSpawnType.COMMAND, true, false);
+                    }, player.blockPosition().above(), EntitySpawnReason.COMMAND, true, false);
 
 
                     return 1;

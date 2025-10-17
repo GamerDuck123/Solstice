@@ -37,13 +37,13 @@ public class RTPModule extends ModuleBase.Toggleable {
     }
 
     public Locator createLocator(ServerPlayer player) {
-        var locator = new Locator(player, player.serverLevel(), getConfig());
+        var locator = new Locator(player, player.level(), getConfig());
         locators.add(locator);
         return locator;
     }
 
     public Locator createLocatorWithBiome(ServerPlayer player, ResourceKey<Biome> biome) {
-        var locator = new Locator(player, player.serverLevel(), getConfig(), biome);
+        var locator = new Locator(player, player.level(), getConfig(), biome);
         locators.add(locator);
         return locator;
     }

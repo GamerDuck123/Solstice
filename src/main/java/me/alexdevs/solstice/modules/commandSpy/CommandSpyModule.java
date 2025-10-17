@@ -40,7 +40,7 @@ public class CommandSpyModule extends ModuleBase.Toggleable {
             var player = source.getPlayer();
 
             var players = source.getServer().getPlayerList().getPlayers();
-            var placeholders = Map.of("player", Component.nullToEmpty(player.getGameProfile().getName()), "command", Component.nullToEmpty(command));
+            var placeholders = Map.of("player", Component.nullToEmpty(player.getGameProfile().name()), "command", Component.nullToEmpty(command));
             var message = locale().get("spyFormat", placeholders);
             for (var pl : players) {
                 var commandSpyEnabled = Permissions.check(pl, this.getPermissionNode("base"));

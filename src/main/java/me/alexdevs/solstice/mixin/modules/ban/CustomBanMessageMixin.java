@@ -6,6 +6,7 @@ import me.alexdevs.solstice.Solstice;
 import me.alexdevs.solstice.modules.ban.formatters.BanMessageFormatter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.players.NameAndId;
 import net.minecraft.server.players.PlayerList;
 import net.minecraft.server.players.UserBanListEntry;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,9 +19,9 @@ import java.net.SocketAddress;
 @Mixin(PlayerList.class)
 public abstract class CustomBanMessageMixin {
     @Inject(method = "canPlayerLogin", at = @At(value = "RETURN", ordinal = 0), cancellable = true)
-    public void solstice$formatBanMessage(SocketAddress address, GameProfile profile, CallbackInfoReturnable<Component> cir, @Local UserBanListEntry bannedPlayerEntry, @Local MutableComponent mutableText) {
+    public void solstice$formatBanMessage(SocketAddress address, NameAndId nameAndId, CallbackInfoReturnable<Component> cir, @Local UserBanListEntry bannedPlayerEntry, @Local MutableComponent mutableText) {
         try {
-            var reasonText = BanMessageFormatter.format(profile, bannedPlayerEntry);
+            var reasonText = BanMessageFormatter.format(new GameProfile(nameAndId.id(), nameAndId.name()), bannedPlayerEntry);
             cir.setReturnValue(reasonText);
         } catch (Exception ex) {
             Solstice.LOGGER.error("Something went wrong while formatting the ban message", ex);

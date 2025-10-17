@@ -11,6 +11,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import me.alexdevs.solstice.api.text.Format;
+
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -65,9 +67,9 @@ public class LinkParser implements NodeParser {
                         .append(display)
                         .setStyle(Style.EMPTY
                                 .withHoverEvent(
-                                        new HoverEvent(HoverEvent.Action.SHOW_TEXT, hover)
+                                        new HoverEvent.ShowText(hover)
                                 )
-                                .withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, link))
+                                .withClickEvent(new ClickEvent.OpenUrl(URI.create(link)))
                         );
 
                 list.add(new DirectTextNode(text));

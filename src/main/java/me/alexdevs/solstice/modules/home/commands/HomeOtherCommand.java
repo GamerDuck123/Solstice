@@ -44,11 +44,11 @@ public class HomeOtherCommand extends ModCommand<HomeModule> {
         var playerContext = PlaceholderContext.of(context.getSource().getPlayer());
 
 
-        var data = module.getData(profile.getId());
+        var data = module.getData(profile.id());
 
         var placeholders = Map.of(
                 "home", Component.nullToEmpty(name),
-                "owner", Component.nullToEmpty(profile.getName())
+                "owner", Component.nullToEmpty(profile.name())
         );
 
         if (!data.homes.containsKey(name)) {

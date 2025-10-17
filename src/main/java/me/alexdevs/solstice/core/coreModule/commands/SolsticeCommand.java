@@ -89,9 +89,9 @@ public class SolsticeCommand extends ModCommand<CoreModule> {
                                 .executes(context -> {
                                     var profile = LocalGameProfile.getProfile(context, "player");
 
-                                    context.getSource().sendSuccess(() -> Component.nullToEmpty("Force reloading player data for " + profile.getName()), true);
+                                    context.getSource().sendSuccess(() -> Component.nullToEmpty("Force reloading player data for " + profile.name()), true);
 
-                                    Solstice.playerData.forceLoad(profile.getId());
+                                    Solstice.playerData.forceLoad(profile.id());
                                     return 0;
                                 })))
                 .then(literal("debug")
@@ -142,8 +142,8 @@ public class SolsticeCommand extends ModCommand<CoreModule> {
                                         text.append(
                                                 Component.literal(" #" + tag.location())
                                                         .setStyle(Style.EMPTY
-                                                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.nullToEmpty("Click to copy")))
-                                                                .withClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, "#" + tag.location()))
+                                                                .withHoverEvent(new HoverEvent.ShowText(Component.nullToEmpty("Click to copy")))
+                                                                .withClickEvent(new ClickEvent.CopyToClipboard("#" + tag.location()))
                                                         )
                                         );
                                     }

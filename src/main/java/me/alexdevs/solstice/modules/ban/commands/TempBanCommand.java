@@ -10,6 +10,7 @@ import me.alexdevs.solstice.api.module.ModCommand;
 import me.alexdevs.solstice.modules.ban.BanModule;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.GameProfileArgument;
+import net.minecraft.server.players.NameAndId;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -50,7 +51,7 @@ public class TempBanCommand extends ModCommand<BanModule> {
 
     }
 
-    private int execute(CommandContext<CommandSourceStack> context, Collection<GameProfile> targets, String reason, int duration) throws CommandSyntaxException {
+    private int execute(CommandContext<CommandSourceStack> context, Collection<NameAndId> targets, String reason, int duration) throws CommandSyntaxException {
         var expiryDate = getDateFromNow(duration);
 
         return BanCommand.execute(context, targets, reason, expiryDate);

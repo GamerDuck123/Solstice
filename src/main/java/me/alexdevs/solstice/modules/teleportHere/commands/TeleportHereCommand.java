@@ -31,7 +31,7 @@ public class TeleportHereCommand extends ModCommand<TeleportHereModule> {
                         .executes(context -> {
                             var source = context.getSource();
                             var player = source.getPlayerOrException();
-                            var world = player.serverLevel();
+                            var world = player.level();
                             var vec3d = player.position();
                             var yaw = player.getYRot();
                             var pitch = player.getXRot();
@@ -39,7 +39,7 @@ public class TeleportHereCommand extends ModCommand<TeleportHereModule> {
                             var targets = EntityArgument.getEntities(context, "targets");
 
                             targets.forEach(target -> {
-                                target.teleportTo(world, vec3d.x, vec3d.y, vec3d.z, Set.of(), yaw, pitch);
+                                target.teleportTo(world, vec3d.x, vec3d.y, vec3d.z, Set.of(), yaw, pitch, true);
                                 target.setDeltaMovement(target.getDeltaMovement().multiply(1.0, 0.0, 1.0));
                                 target.setOnGround(true);
 

@@ -13,12 +13,14 @@ import me.alexdevs.solstice.modules.spawn.data.SpawnLocale;
 import me.alexdevs.solstice.modules.spawn.data.SpawnServerData;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.LevelData;
 import org.jetbrains.annotations.Nullable;
 
 public class SpawnModule extends ModuleBase.Toggleable {
@@ -67,7 +69,9 @@ public class SpawnModule extends ModuleBase.Toggleable {
             if (spawnData.spawn != null) {
                 var legacy = spawnData.spawn;
                 var world = legacy.getWorld(server);
-                world.setDefaultSpawnPos(new BlockPos((int) legacy.getX(), (int) legacy.getY(), (int) legacy.getZ()), legacy.getYaw());
+                world.setRespawnData(new LevelData.RespawnData(GlobalPos.of(world.dimension(),
+                        new BlockPos((int) legacy.getX(), (int) legacy.getY(), (int) legacy.getZ())),
+                        legacy.getYaw(), legacy.getPitch()));
                 spawnData.spawn = null;
             }
         });
@@ -79,8 +83,8 @@ public class SpawnModule extends ModuleBase.Toggleable {
         var spawnPosition = serverData.spawn;
         if (spawnPosition == null) {
             var server = Solstice.server;
-            var spawnPos = server.overworld().getSharedSpawnPos();
-            spawnPosition = new ServerLocation(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(), 0, 0, server.overworld());
+            var spawnPos = server.overworld().getRespawnData();
+            spawnPosition = new ServerLocation(spawnPos.pos().getX(), spawnPos.pos().getY(), spawnPos.pos().getZ(), 0, 0, server.overworld());
         }
         return spawnPosition;
     }
@@ -97,8 +101,8 @@ public class SpawnModule extends ModuleBase.Toggleable {
     }
 
     public ServerLocation getWorldSpawn(ServerLevel world) {
-        var worldSpawnPosition = world.getSharedSpawnPos().getCenter();
-        var worldSpawnYaw = world.getSharedSpawnAngle();
+        var worldSpawnPosition = world.getRespawnData().pos().getCenter();
+        var worldSpawnYaw = world.getRespawnData().yaw();
         var worldName = world.dimension().location().toString();
 
         if (world.dimension() != Level.OVERWORLD) {
@@ -123,7 +127,7 @@ public class SpawnModule extends ModuleBase.Toggleable {
     }
 
     public void sendToSpawn(ServerPlayer player) {
-        sendToSpawn(player, player.serverLevel());
+        sendToSpawn(player, player.level());
     }
 
     public void sendToSpawn(ServerPlayer player, ServerLevel world) {

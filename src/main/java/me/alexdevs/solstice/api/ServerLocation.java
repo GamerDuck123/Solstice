@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
+import java.util.Set;
 
 public class ServerLocation {
     protected final double x;
@@ -45,7 +46,7 @@ public class ServerLocation {
     }
 
     public ServerLocation(ServerPlayer player) {
-        this(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot(), player.serverLevel().dimension().location().toString());
+        this(player.getX(), player.getY(), player.getZ(), player.getYRot(), player.getXRot(), player.level().dimension().location().toString());
     }
 
     public ServerLocation(double x, double y, double z, float yaw, float pitch, String worldKey) {
@@ -75,12 +76,12 @@ public class ServerLocation {
             ModuleProvider.BACK.setPlayerLastLocation(player.getUUID(), currentPosition);
         }
 
-        var serverWorld = getWorld(player.getServer());
+        var serverWorld = getWorld(player.level().getServer());
 
         player.setDeltaMovement(player.getDeltaMovement().multiply(1f, 0f, 1f));
         player.setOnGround(true);
 
-        player.teleportTo(serverWorld, this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch());
+        player.teleportTo(serverWorld, this.getX(), this.getY(), this.getZ(), Set.of(), this.getYaw(), this.getPitch(), true);
 
         // There is a bug (presumably in Fabric's api) that causes experience level to be set to 0 when teleporting between dimensions/worlds.
         // Therefore, this will update the experience client side as a temporary solution.
@@ -143,7 +144,7 @@ public class ServerLocation {
     }
 
     public boolean safeTeleport(ServerPlayer player, boolean setBackPosition, int range) {
-        var world = getWorld(player.getServer());
+        var world = getWorld(player.level().getServer());
 
         var horRange = (int) Math.pow(range, 2);
         for (int i = 1; i <= horRange; i++) {

@@ -43,7 +43,7 @@ public class TeleportOfflineCommand extends ModCommand<TeleportOfflineModule> {
                                 return 0;
                             }
 
-                            source.sendSuccess(() -> Component.translatable("commands.teleport.success.entity.single", player.getDisplayName(), Component.nullToEmpty(gameProfile.getName())), true);
+                            source.sendSuccess(() -> Component.translatable("commands.teleport.success.entity.single", player.getDisplayName(), Component.nullToEmpty(gameProfile.name())), true);
 
                             targetData.logoffPosition.teleport(player, true);
                             return 1;

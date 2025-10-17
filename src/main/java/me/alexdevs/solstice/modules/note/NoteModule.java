@@ -48,10 +48,10 @@ public class NoteModule extends ModuleBase.Toggleable {
             var checkButton = Components.button(
                     locale().raw("checkButton"),
                     locale().raw("hoverCheck"),
-                    "/notes " + player.getGameProfile().getName()
+                    "/notes " + player.getGameProfile().name()
             );
             final var text = locale().get("loginInfo", context, Map.of(
-                    "user", Component.nullToEmpty(player.getGameProfile().getName()),
+                    "user", Component.nullToEmpty(player.getGameProfile().name()),
                     "notes", Component.nullToEmpty(String.valueOf(notes.size())),
                     "checkButton", checkButton
             ));

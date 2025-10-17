@@ -38,18 +38,18 @@ public class CoreModule extends ModuleBase {
             Solstice.getUserCache().add(handler.getPlayer().getGameProfile());
             var player = handler.getPlayer();
             var playerData = Solstice.playerData.get(player).getData(CorePlayerData.class);
-            playerData.username = player.getGameProfile().getName();
+            playerData.username = player.getGameProfile().name();
             playerData.lastSeenDate = new Date();
             playerData.ipAddress = handler.getPlayer().getIpAddress();
 
             if (playerData.firstJoinedDate == null) {
-                Solstice.LOGGER.info("Player {} joined for the first time!", player.getGameProfile().getName());
+                Solstice.LOGGER.info("Player {} joined for the first time!", player.getGameProfile().name());
                 playerData.firstJoinedDate = new Date();
                 SolsticeEvents.WELCOME.invoker().onWelcome(player, server);
             }
 
-            if (playerData.username != null && !playerData.username.equals(player.getGameProfile().getName())) {
-                Solstice.LOGGER.info("Player {} has changed their username from {}", player.getGameProfile().getName(), playerData.username);
+            if (playerData.username != null && !playerData.username.equals(player.getGameProfile().name())) {
+                Solstice.LOGGER.info("Player {} has changed their username from {}", player.getGameProfile().name(), playerData.username);
                 SolsticeEvents.USERNAME_CHANGE.invoker().onUsernameChange(player, playerData.username);
             }
         });
@@ -78,9 +78,9 @@ public class CoreModule extends ModuleBase {
     }
 
     public static String getUsername(UUID uuid) {
-        var profile = Solstice.server.getProfileCache().get(uuid);
+        var profile = Solstice.server.services().profileResolver().fetchById(uuid);
         if(profile.isPresent())
-            return profile.get().getName();
+            return profile.get().name();
 
         return uuid.toString();
     }

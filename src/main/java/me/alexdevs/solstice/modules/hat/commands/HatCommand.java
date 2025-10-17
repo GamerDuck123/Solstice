@@ -4,6 +4,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import me.alexdevs.solstice.api.module.ModCommand;
 import me.alexdevs.solstice.modules.hat.HatModule;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.world.entity.EquipmentSlot;
 
 import java.util.List;
 
@@ -52,9 +53,9 @@ public class HatCommand extends ModCommand<HatModule> {
                     //handStack.streamTags().toList().get(0).id().toString();
 
                     var inventory = player.getInventory();
-                    var oldHeadStack = inventory.armor.get(3); // head slot
-                    inventory.setItem(inventory.selected, oldHeadStack.copyAndClear());
-                    inventory.armor.set(3, handStack.copyAndClear());
+                    var oldHeadStack = inventory.getItem(EquipmentSlot.HEAD.getId()); // head slot
+                    inventory.setItem(inventory.getSelectedSlot(), oldHeadStack.copyAndClear());
+                    inventory.setItem(EquipmentSlot.HEAD.getId(), handStack.copyAndClear());
 
                     context.getSource().sendSuccess(() -> module.locale().get("success"), false);
 

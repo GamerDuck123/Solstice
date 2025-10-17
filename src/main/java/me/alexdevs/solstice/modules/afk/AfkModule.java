@@ -21,7 +21,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
 
@@ -96,11 +95,11 @@ public class AfkModule extends ModuleBase.Toggleable {
         PlayerActivityEvents.AFK.register((player) -> {
             var config = getConfig();
 
-            if (player.serverLevel().canSleepThroughNights()) {
-                player.serverLevel().updateSleepingPlayerList();
+            if (player.level().canSleepThroughNights()) {
+                player.level().updateSleepingPlayerList();
             }
 
-            Solstice.LOGGER.info("{} is AFK. Active time: {} seconds.", player.getGameProfile().getName(), getActiveTime(player.getUUID()));
+            Solstice.LOGGER.info("{} is AFK. Active time: {} seconds.", player.getGameProfile().name(), getActiveTime(player.getUUID()));
             if (!config.announce)
                 return;
 
@@ -112,11 +111,11 @@ public class AfkModule extends ModuleBase.Toggleable {
         PlayerActivityEvents.AFK_RETURN.register((player, reason) -> {
             var config = getConfig();
 
-            if (player.serverLevel().canSleepThroughNights()) {
-                player.serverLevel().updateSleepingPlayerList();
+            if (player.level().canSleepThroughNights()) {
+                player.level().updateSleepingPlayerList();
             }
 
-            Solstice.LOGGER.info("{} is no longer AFK due to {}. Active time: {} seconds.", player.getGameProfile().getName(), reason.name(), getActiveTime(player.getUUID()));
+            Solstice.LOGGER.info("{} is no longer AFK due to {}. Active time: {} seconds.", player.getGameProfile().name(), reason.name(), getActiveTime(player.getUUID()));
             if (!config.announce)
                 return;
 
@@ -137,7 +136,7 @@ public class AfkModule extends ModuleBase.Toggleable {
                 .stream().filter(player -> !isPlayerAfk(player));
 
         activePlayers.forEach(player -> {
-            var activity = activities.computeIfAbsent(player.getUUID(), uuid -> new PlayerActivityState(player, player.getServer().getTickCount()));
+            var activity = activities.computeIfAbsent(player.getUUID(), uuid -> new PlayerActivityState(player, player.level().getServer().getTickCount()));
             if (!activity.activeTimeEnabled)
                 return;
 
@@ -155,7 +154,7 @@ public class AfkModule extends ModuleBase.Toggleable {
         var entry = leaderboard.stream().filter(e -> e.uuid().equals(player.getUUID())).findFirst();
         if (entry.isPresent()) {
             entry.get().activeTime(activeTime);
-            entry.get().name(player.getGameProfile().getName());
+            entry.get().name(player.getGameProfile().name());
             leaderboard.sort((o1, o2) -> Integer.compare(o2.activeTime(), o1.activeTime()));
             return;
         }
@@ -165,11 +164,11 @@ public class AfkModule extends ModuleBase.Toggleable {
         if (smallest.isPresent()) {
             if (smallest.get().activeTime() < activeTime) {
                 leaderboard.remove(smallest.get());
-                leaderboard.add(new LeaderboardEntry(player.getGameProfile().getName(), player.getUUID(), activeTime));
+                leaderboard.add(new LeaderboardEntry(player.getGameProfile().name(), player.getUUID(), activeTime));
                 leaderboard.sort((o1, o2) -> Integer.compare(o2.activeTime(), o1.activeTime()));
             }
         } else {
-            leaderboard.add(new LeaderboardEntry(player.getGameProfile().getName(), player.getUUID(), activeTime));
+            leaderboard.add(new LeaderboardEntry(player.getGameProfile().name(), player.getUUID(), activeTime));
         }
     }
 
@@ -265,9 +264,9 @@ public class AfkModule extends ModuleBase.Toggleable {
             if (profile.isEmpty())
                 continue;
 
-            var playerData = Solstice.playerData.get(profile.get().getId()).getData(AfkPlayerData.class);
+            var playerData = Solstice.playerData.get(profile.get().id()).getData(AfkPlayerData.class);
             if (playerData.activeTime > 0) {
-                var entry = new LeaderboardEntry(profile.get().getName(), profile.get().getId(), playerData.activeTime);
+                var entry = new LeaderboardEntry(profile.get().name(), profile.get().id(), playerData.activeTime);
                 temp.add(entry);
             }
         }
@@ -343,7 +342,7 @@ public class AfkModule extends ModuleBase.Toggleable {
             if (getConfig().triggers.onItemUse) {
                 clearAfk((ServerPlayer) player, AfkTriggerReason.ITEM_USE);
             }
-            return InteractionResultHolder.pass(player.getItemInHand(hand));
+            return InteractionResult.PASS;
         });
 
         ServerMessageEvents.ALLOW_CHAT_MESSAGE.register((message, sender, params) -> {

@@ -1,6 +1,7 @@
 package me.alexdevs.solstice.modules.kit;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import eu.pb4.placeholders.impl.StringArgOps;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import me.alexdevs.solstice.Solstice;
 import net.minecraft.nbt.TagParser;
@@ -12,15 +13,17 @@ import java.util.List;
 
 public class Utils {
     public static String serializeItemStack(ItemStack itemStack) {
-        var registry = Solstice.server.registryAccess();
-        var nbt = itemStack.save(registry);
-        return nbt.getAsString();
+//        var registry = Solstice.server.registryAccess();
+//        var nbt = itemStack.save(registry);
+//        return nbt.getAsString();
+        return ItemStack.CODEC.encodeStart(StringArgOps.INSTANCE, itemStack).resultOrPartial().get().left().get();
     }
 
     public static ItemStack deserializeItemStack(String string) throws CommandSyntaxException {
-        var registry = Solstice.server.registryAccess();
-        var nbt = TagParser.parseTag(string);
-        return ItemStack.parseOptional(registry, nbt);
+//        var registry = Solstice.server.registryAccess();
+//        var nbt = TagParser.parseCompoundFully(string);
+//        return ItemStack.parseOptional(registry, nbt);
+        return ItemStack.CODEC.decode(StringArgOps.INSTANCE, StringArgOps.INSTANCE.createString(string)).resultOrPartial().get().getFirst();
     }
 
     public static KitInventory createInventory(List<ItemStack> items) {

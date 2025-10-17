@@ -86,12 +86,12 @@ public class UserCache {
     private void add(Entry entry) {
         var gameProfile = entry.getProfile();
         entry.setLastAccessed(this.incrementAndGetAccessCount());
-        var name = gameProfile.getName();
+        var name = gameProfile.name();
         if (name != null) {
             this.byName.put(name.toLowerCase(Locale.ROOT), entry);
         }
 
-        var uuid = gameProfile.getId();
+        var uuid = gameProfile.id();
         if (uuid != null) {
             byUUID.put(uuid, entry);
         }
@@ -99,8 +99,8 @@ public class UserCache {
 
     private static JsonElement entryToJson(Entry entry, DateFormat dateFormat) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("name", entry.getProfile().getName());
-        UUID uUID = entry.getProfile().getId();
+        jsonObject.addProperty("name", entry.getProfile().name());
+        UUID uUID = entry.getProfile().id();
         jsonObject.addProperty("uuid", uUID == null ? "" : uUID.toString());
         jsonObject.addProperty("expiresOn", dateFormat.format(entry.getExpirationDate()));
         return jsonObject;

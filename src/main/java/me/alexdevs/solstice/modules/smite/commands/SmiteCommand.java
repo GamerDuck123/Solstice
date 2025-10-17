@@ -11,8 +11,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.phys.HitResult;
 
 import java.util.List;
@@ -57,7 +57,7 @@ public class SmiteCommand extends ModCommand<SmiteModule> {
             return 0;
         }
 
-        summon(player.serverLevel(), result.getBlockPos().above());
+        summon(player.level(), result.getBlockPos().above());
 
         return 1;
     }
@@ -73,7 +73,7 @@ public class SmiteCommand extends ModCommand<SmiteModule> {
         }
         for (var i = 0; i < times; i++) {
             targets.forEach(target ->
-                    summon(player.serverLevel(), target.blockPosition())
+                    summon(player.level(), target.blockPosition())
             );
         }
 
@@ -85,7 +85,7 @@ public class SmiteCommand extends ModCommand<SmiteModule> {
                 world,
                 world::addFreshEntity,
                 pos,
-                MobSpawnType.COMMAND,
+                EntitySpawnReason.COMMAND,
                 false,
                 false);
     }

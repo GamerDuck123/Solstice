@@ -2,8 +2,11 @@ package me.alexdevs.solstice.api.utils;
 
 import com.mojang.authlib.GameProfile;
 import me.alexdevs.solstice.Solstice;
+import me.alexdevs.solstice.modules.spawn.SpawnModule;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.NameAndId;
+
 import java.util.UUID;
 
 public class PlayerUtils {
@@ -12,14 +15,11 @@ public class PlayerUtils {
     }
 
     public static ServerPlayer loadOfflinePlayer(GameProfile profile) {
-        if (isOnline(profile.getId())) {
+        if (isOnline(profile.id())) {
             return null;
         }
 
-        var playerManager = Solstice.server.getPlayerList();
-        var player = playerManager.getPlayerForLogin(profile, ClientInformation.createDefault());
-        playerManager.load(player);
-        return player;
+        return new ServerPlayer(Solstice.server, Solstice.modules.getModule(SpawnModule.class).get().getGlobalSpawnWorld().getLevel(), profile, null);
     }
 
     public static void saveOfflinePlayer(ServerPlayer player) {

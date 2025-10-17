@@ -11,6 +11,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.GameProfileArgument;
+import net.minecraft.server.players.NameAndId;
+
 import java.util.concurrent.CompletableFuture;
 
 public class LocalGameProfile {
@@ -20,7 +22,8 @@ public class LocalGameProfile {
             throw EntityArgument.ERROR_NOT_SINGLE_PLAYER.create();
         }
 
-        return profiles.iterator().next();
+        NameAndId nameAndId = profiles.iterator().next();
+        return new GameProfile(nameAndId.id(), nameAndId.name());
     }
 
     public static GameProfile getProfile(CommandContext<CommandSourceStack> context, String name) throws CommandSyntaxException {

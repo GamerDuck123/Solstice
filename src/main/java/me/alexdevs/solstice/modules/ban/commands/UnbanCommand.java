@@ -15,6 +15,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.commands.arguments.GameProfileArgument;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.players.NameAndId;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,15 +49,15 @@ public class UnbanCommand extends ModCommand<BanModule> {
                         .executes(context -> execute(context, GameProfileArgument.getGameProfiles(context, "targets"))));
     }
 
-    private int execute(CommandContext<CommandSourceStack> context, Collection<GameProfile> targets) throws CommandSyntaxException {
+    private int execute(CommandContext<CommandSourceStack> context, Collection<NameAndId> targets) throws CommandSyntaxException {
         var banList = context.getSource().getServer().getPlayerList().getBans();
         var source = context.getSource();
         var pardonCount = 0;
-        for (GameProfile profile : targets) {
+        for (NameAndId profile : targets) {
             if (banList.isBanned(profile)) {
                 banList.remove(profile);
                 pardonCount++;
-                source.sendSuccess(() -> Component.translatable("commands.pardon.success", Component.nullToEmpty(profile.getName())), true);
+                source.sendSuccess(() -> Component.translatable("commands.pardon.success", Component.nullToEmpty(profile.name())), true);
             }
         }
 

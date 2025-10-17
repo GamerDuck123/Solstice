@@ -61,7 +61,7 @@ public class RTPCommand extends ModCommand<RTPModule> {
         var config = module.getConfig();
 
         if (config.requireWorldPermission) {
-            var worldName = player.serverLevel().dimension().location().toString();
+            var worldName = player.level().dimension().location().toString();
             if (!Permissions.check(context.getSource(), getPermissionNode("worlds." + worldName), 2)) {
                 context.getSource().sendSuccess(() -> module.locale().get("noWorldPermission", Map.of("world", Component.nullToEmpty(worldName))), false);
                 return 0;

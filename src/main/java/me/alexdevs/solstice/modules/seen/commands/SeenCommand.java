@@ -59,8 +59,8 @@ public class SeenCommand extends ModCommand<SeenModule> {
                             var config = CoreModule.getConfig();
 
                             var dateFormatter = new SimpleDateFormat(config.dateTimeFormat);
-                            var player = source.getServer().getPlayerList().getPlayer(profile.getId());
-                            var playerData = CoreModule.getPlayerData(profile.getId());
+                            var player = source.getServer().getPlayerList().getPlayer(profile.id());
+                            var playerData = CoreModule.getPlayerData(profile.id());
 
                             if(playerData.firstJoinedDate == null) {
                                 source.sendSuccess(() -> module.locale().get("playerNotFound"), false);
@@ -79,8 +79,8 @@ public class SeenCommand extends ModCommand<SeenModule> {
                             var ipAddress = playerData.ipAddress != null ? playerData.ipAddress : module.locale().raw("unknown");
 
                             Map<String, Component> map = Map.of(
-                                    "username", Component.nullToEmpty(profile.getName()),
-                                    "uuid", Component.nullToEmpty(profile.getId().toString()),
+                                    "username", Component.nullToEmpty(profile.name()),
+                                    "uuid", Component.nullToEmpty(profile.id().toString()),
                                     "firstSeenDate", Component.nullToEmpty(firstSeenDate),
                                     "lastSeenDate", Component.nullToEmpty(player != null ? module.locale().raw("online") : lastSeenDate),
                                     "ipAddress", Component.nullToEmpty(ipAddress),

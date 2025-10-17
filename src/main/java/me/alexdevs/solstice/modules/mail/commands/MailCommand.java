@@ -164,14 +164,14 @@ public class MailCommand extends ModCommand<MailModule> {
         var server = context.getSource().getServer();
 
         var mail = new PlayerMail(message, sender.getUUID());
-        var actuallySent = module.sendMail(recipient.getId(), mail);
+        var actuallySent = module.sendMail(recipient.id(), mail);
 
         var senderContext = PlaceholderContext.of(sender);
 
         context.getSource().sendSuccess(() -> module.locale().get("mailSent", senderContext), false);
 
         if (actuallySent) {
-            var recPlayer = server.getPlayerList().getPlayer(recipient.getId());
+            var recPlayer = server.getPlayerList().getPlayer(recipient.id());
             if (recPlayer == null) {
                 return 1;
             }
